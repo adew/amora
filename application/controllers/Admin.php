@@ -813,5 +813,47 @@ class Admin extends CI_Controller
             $this->model_konsep->delete_by_id($row->id_konsep);
         }
         echo json_encode(array("status" => TRUE));
+    
+    }
+
+    public function dashboard_nominatif($tahun = null)
+    {
+        if(empty($tahun))
+            $tahun = date('Y');
+
+        $user = $this->ion_auth->user()->row();
+
+        $data['title'] = 'Dashboard Nominatif Tahun '. $tahun;
+        $data['username'] = $user->username;
+        $data['nama_lengkap'] = $user->nama_petugas;
+
+        $this->load->model("Model_data_nominatif", "NominatifModel");
+
+        $nominatif = $this->NominatifModel->getStatistic($tahun);
+
+        $datanominatif = array();
+        foreach($nominatif as $row){
+            $datanominatif[$row['jenis']][$row['pelaku']][$row['bulan']] =$row;
+        }
+
+        $data['nominatif'] = $datanominatif;    
+
+        $nominatif_sebelum = $this->NominatifModel->getLastYear($tahun);
+        $datanominatif_sebelum = array();
+        foreach($nominatif_sebelum as $row){
+            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] =$row;
+        }
+
+        $data['nominatif_sebelum'] = $datanominatif_sebelum;
+        
+        $data['jenis'] = $this->NominatifModel::$jenis;
+        $data['pelaku'] = $this->NominatifModel::$pelaku;
+        $data['bulan'] = $this->NominatifModel::$bulan;
+        $data['tahun'] = $tahun;
+
+        $this->load->view('includes/header', $data);
+        $this->load->view('includes/sidebar', $data);
+
+        $this->load->view('pages/dashboard_nominatif', $data);
     }
 }

@@ -26,9 +26,9 @@
       </li>
       <li class="header">PERKARA</li>
       <li>
-        <a href="<?php echo site_url('admin/page/konsep_putusan'); ?>">
-          <i class="fa fa-copy"></i>
-          <span>Konsep Putusan</span>
+        <a href="<?php echo site_url('admin/dashboard_nominatif'); ?>">
+          <i class="fa fa-home"></i>
+          <span>Dashboard Nominatif</span>
         </a>
       </li>
       <li>
@@ -38,6 +38,12 @@
         </a>
       </li>
 
+      <li>
+        <a href="<?php echo site_url('admin/page/konsep_putusan'); ?>">
+          <i class="fa fa-copy"></i>
+          <span>Konsep Putusan</span>
+        </a>
+      </li>
       <!--<li>
         <a href="<?php echo site_url('admin/page/disposisi_surat_masuk'); ?>">
           <i class="fa fa-file"></i>

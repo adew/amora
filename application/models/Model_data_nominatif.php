@@ -7,6 +7,33 @@ class Model_data_nominatif extends CI_Model
 	var $column_search = array('no_surat', 'tgl_surat', 'perihal', 'pengirim', 'kepada', 'jenis_surat', 'sifat_surat', 'petugas', 'deskripsi');
 	var $order = array('id' => 'asc');
 
+	public static $jenis = array(
+		'kejahatan' => 'Kejahatan',
+		'pelanggaran' => 'Pelanggaran'
+	);
+
+	public static $pelaku = array(
+		'1' => 'TNI AD',
+		'2' => 'TNI AL',
+		'3' => 'TNI AU'
+	);
+
+	public static $bulan = array(
+		1 => 'Januari',
+		2 => 'Februari',
+		3 => 'Maret',
+		4 => 'April',
+		5 => 'Mei',
+		6 => 'Juni',
+		7 => 'Juli',
+		8 => 'Agustus',
+		9 => 'September',
+		10 => 'Oktober',
+		11 => 'November',
+		12 => 'Desember',
+	);
+
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -94,5 +121,27 @@ class Model_data_nominatif extends CI_Model
 	{
 		$this->db->where('id_surat_keluar', $id);
 		$this->db->delete($this->table);
+	}
+
+	public function getStatistic($tahun){
+		$this->db->where('tahun', $tahun);
+		$this->db->from($this->table);
+
+		$query = $this->db->get();
+
+		return $query->result_array();
+	}
+	
+	public function getLastYear($tahun){
+		$tahun = $tahun - 1;
+
+		$sql = "select jenis, pelaku, sum(jml_perkara_masuk) jml_perkara_masuk, sum(jml_perkara_putus) jml_perkara_putus
+		 from nominatif
+		 where tahun = '".$tahun."'
+		 group by jenis, pelaku";
+
+		 $query = $this->db->query($sql);
+
+		 return $query->result_array();
 	}
 }
