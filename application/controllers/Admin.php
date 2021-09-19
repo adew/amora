@@ -823,7 +823,7 @@ class Admin extends CI_Controller
 
         $user = $this->ion_auth->user()->row();
 
-        $data['title'] = 'Dashboard Nominatif Tahun '. $tahun;
+        $data['title'] = 'Dashboard Nominatif';
         $data['username'] = $user->username;
         $data['nama_lengkap'] = $user->nama_petugas;
 
@@ -841,7 +841,12 @@ class Admin extends CI_Controller
         $nominatif_sebelum = $this->NominatifModel->getLastYear($tahun);
         $datanominatif_sebelum = array();
         foreach($nominatif_sebelum as $row){
-            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] =$row;
+            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] =$row['jml_perkara_masuk'] - $row['jml_perkara_putus'];
+        }
+
+        $nominatif_sebelum = $this->NominatifModel->getLastYear($tahun - 1);
+        foreach($nominatif_sebelum as $row){
+            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] = $datanominatif_sebelum[$row['jenis']][$row['pelaku']] + ($row['jml_perkara_masuk'] - $row['jml_perkara_putus']);
         }
 
         $data['nominatif_sebelum'] = $datanominatif_sebelum;

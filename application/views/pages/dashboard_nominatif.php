@@ -35,12 +35,12 @@
                                     <?php
                                     $total = array();
                                     foreach ($pelaku as $kpelaku => $vpelaku) {
-                                        $subtotal = $nominatif_sebelum[$kjenis][$kpelaku]['jml_perkara_' . $perkara];
-                                        $total['sebelum'] += $nominatif_sebelum[$kjenis][$kpelaku]['jml_perkara_' . $perkara];
+                                        $subtotal = $nominatif_sebelum[$kjenis][$kpelaku];
+                                        $total['sebelum'] += $nominatif_sebelum[$kjenis][$kpelaku];
                                     ?>
                                         <tr>
                                             <td class="text-center"><strong><?= $vpelaku ?></strong></td>
-                                            <td class="text-right"><?= $nominatif_sebelum[$kjenis][$kpelaku]['jml_perkara_' . $perkara] ?></td>
+                                            <td class="text-right"><?= $nominatif_sebelum[$kjenis][$kpelaku] ?></td>
                                             <?php foreach ($bulan as $kbulan => $vbulan) { ?>
                                                 <td class="text-right">
                                                     <?php
