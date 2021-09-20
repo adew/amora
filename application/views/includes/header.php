@@ -16,6 +16,10 @@ echo link_tag('assets/adminlte/css/skins/_all-skins.min.css');
 
 ?>
 
+<script src="<?=base_url() ?>/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="<?=base_url() ?>/assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?=base_url() ?>/assets/adminlte/js/adminlte.min.js" type="text/javascript"></script>
+
 </head>
 <!-- <body class="hold-transition skin-blue-light sidebar-collapse sidebar-mini"> -->
 
