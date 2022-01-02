@@ -10,16 +10,16 @@
     <!-- Main content -->
     <section class="content container-fluid">
 
-        <a href="#InputSuratMasuk" id="tab2" class="btn btn-info">
+        <a href="#InputDataNominatif" id="tab2" class="btn btn-info">
             <i class="fa fa-plus"></i> Input Data
         </a>
         <a href="#SuratMasuk" id="tab1" class="btn btn-info sr-only">
             <i class="fa fa-chevron-left"></i> Kembali
         </a>
         <button id="deleteList" disabled="disabled" class="btn btn-danger" onclick="deleteList()"><i class="fa fa-trash"></i> Hapus</button>
-        <a data-toggle="collapse" class="btn btn-success" href="#collapseOne" style="color: white;">
+        <!-- <a data-toggle="collapse" class="btn btn-success" href="#collapseOne" style="color: white;">
             <i class="fa fa-file-pdf-o"></i> Buat Laporan
-        </a>
+        </a> -->
         <div class="tab-content">
             <div class="tab-pane fade in active" id="SuratMasuk">
                 <div class="box box-primary" style="margin-top: 10px;">
@@ -63,20 +63,17 @@
                         </div>
 
                         <div class="table-responsive">
-                            <table id="surat_keluar" class="display table table-bordered table-hover" width="100%">
+                            <table id="data_nominatif" class="display table table-bordered table-hover" width="100%">
                                 <thead>
                                     <tr>
                                         <th><input type="checkbox" id="check-all"></th>
                                         <th>No</th>
-                                        <th>No. Surat</th>
-                                        <th>Tgl Surat</th>
-                                        <th>Perihal</th>
-                                        <th>Pengirim</th>
-                                        <th>Tujuan Surat</th>
-                                        <th>Jenis Surat</th>
-                                        <!-- <th>Sifat Surat</th> -->
-                                        <th>Keterangan</th>
-                                        <th>Petugas</th>
+                                        <th>Tahun</th>
+                                        <th>Bulan</th>
+                                        <th>Jenis</th>
+                                        <th>Pelaku</th>
+                                        <th>Jumlah Perkara Masuk</th>
+                                        <th>Jumlah Perkara Putus</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -87,7 +84,7 @@
                 </div>
 
             </div>
-            <div class="tab-pane fade" id="InputSuratMasuk">
+            <div class="tab-pane fade" id="InputDataNominatif">
                 <div class="box box-primary" style="margin-top: 10px;">
                     <div class="box-body" style="padding: 10px 20px;">
                         <form id="dataNominatif">
@@ -135,11 +132,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label>Jumlah Perkara Masuk</label>
-                                        <input type="text" name="jumlah_perkara_masuk" class="form-control" />
+                                        <input type="text" name="jml_perkara_masuk" class="form-control" />
                                     </div>
                                     <div class="form-group">
-                                        <label>Jumlah Perkara Keluar</label>
-                                        <input type="text" name="jumlah_perkara_putus" class="form-control" />
+                                        <label>Jumlah Perkara Putus</label>
+                                        <input type="text" name="jml_perkara_putus" class="form-control" />
                                     </div>
 
                                 </div>
@@ -166,18 +163,17 @@
 </div>
 
 
-<script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/js/moment.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 <script>
     var table;
     $(document).ready(function() {
-
         $('a#tab1').click(function(e) {
             e.preventDefault();
             $('#deleteList').show();
@@ -188,37 +184,103 @@
         $('a#tab2').click(function(e) {
             e.preventDefault();
             save_method = 'add';
+            $('#dataNominatif')[0].reset();
             $(this).tab('show');
             $('#deleteList').hide();
             $('a#tab1').removeClass('sr-only');
         });
 
-        table = $('#surat_keluar').DataTable({
 
-            "processing": true,
-            "serverSide": true,
-            "order": [],
+        $('#data_nominatif thead tr')
+            .addClass('filters')
+            .appendTo('#data_nominatif thead');
 
+        // table = $('#data_nominatif').DataTable({
+
+        //     "processing": true,
+        //     "serverSide": true,
+        //     "order": [],
+
+        //     "ajax": {
+        //         "url": "<?php echo site_url('admin/get_data_nominatif'); ?>",
+        //         "type": "POST"
+        //     },
+
+
+        //     "columnDefs": [{
+        //             "targets": [0],
+        //             "orderable": false,
+        //         },
+        //         {
+        //             "targets": [1],
+        //             "orderable": false,
+        //         },
+        //         {
+        //             "targets": [-1],
+        //             "orderable": false,
+        //         },
+        //     ],
+
+        // });
+
+        table = $('#data_nominatif').DataTable({
+            orderCellsTop: false,
+            fixedHeader: false,
             "ajax": {
-                "url": "<?php echo site_url('admin/get_surat_keluar'); ?>",
+                "url": "<?php echo site_url('admin/get_data_nominatif'); ?>",
                 "type": "POST"
             },
+            columnDefs: [{
+                orderable: false,
+                targets: [0, 1, 2, 3, 4, 5, 6, 7, 8]
+            }],
+            initComplete: function() {
+                var api = this.api();
 
+                // For each column
+                api
+                    .columns([2, 3, 4])
+                    .eq(0)
+                    .each(function(colIdx) {
+                        // Set the header cell to contain the input element
+                        var cell = $('.filters th').eq(
+                            $(api.column(colIdx).header()).index()
+                        );
+                        var title = $(cell).text();
+                        $(cell).html('<input type="text" placeholder="' + title + '" />');
 
-            "columnDefs": [{
-                    "targets": [0],
-                    "orderable": false,
-                },
-                {
-                    "targets": [1],
-                    "orderable": false,
-                },
-                {
-                    "targets": [-1],
-                    "orderable": false,
-                },
-            ],
+                        // On every keypress in this input
+                        $(
+                                'input',
+                                $('.filters th').eq($(api.column(colIdx).header()).index())
+                            )
+                            .off('keyup change')
+                            .on('keyup change', function(e) {
+                                e.stopPropagation();
 
+                                // Get the search value
+                                $(this).attr('title', $(this).val());
+                                var regexr = '({search})'; //$(this).parents('th').find('select').val();
+
+                                var cursorPosition = this.selectionStart;
+                                // Search the column for that value
+                                api
+                                    .column(colIdx)
+                                    .search(
+                                        this.value != '' ?
+                                        regexr.replace('{search}', '(((' + this.value + ')))') :
+                                        '',
+                                        this.value != '',
+                                        this.value == ''
+                                    )
+                                    .draw();
+
+                                $(this)
+                                    .focus()[0]
+                                    .setSelectionRange(cursorPosition, cursorPosition);
+                            });
+                    });
+            },
         });
 
 
@@ -293,29 +355,25 @@
 
 
 
-    function editSuratKeluar(id) {
+    function editDataNominatif(id) {
         save_method = 'update';
         $('#dataNominatif')[0].reset();
         $('a#tab2').tab('show');
 
         $.ajax({
-            url: "<?php echo site_url('admin/edit_surat_keluar/') ?>" + id,
+            url: "<?php echo site_url('admin/edit_data_nominatif/') ?>" + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
                 $('a#tab1').removeClass('sr-only');
                 $('#deleteList').hide();
-                $('[name="id_data_nominatif"]').val(data.id_data_nominatif);
-                $('[name="no_surat"]').val(data.no_surat);
-                $('[name="tgl_surat"]').val(data.tgl_surat);
-                $('[name="perihal"]').val(data.perihal);
-                $('[name="jenis_surat"]').val(data.id_jenis_surat);
-                $('[name="pengirim"]').val(data.pengirim);
-                $('[name="ditujukan"]').val(data.kepada);
-                $('[name="deskripsi"]').val(data.deskripsi);
-                $('[name="petugas"]').val(data.id_petugas);
-                $('[name="sifat_surat"]').val(data.sifat_surat);
-
+                $('[name="id_data_nominatif"]').val(data.id);
+                $('[name="tahun"]').val(data.tahun);
+                $('[name="bulan"]').val(data.bulan);
+                $('[name="jenis"]').val(data.jenis);
+                $('[name="pelaku"]').val(data.pelaku);
+                $('[name="jml_perkara_masuk"]').val(data.jml_perkara_masuk);
+                $('[name="jml_perkara_putus"]').val(data.jml_perkara_putus);
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error getting data from ajax');
@@ -324,7 +382,6 @@
     }
 
     function save() {
-
         var url;
 
         if (save_method == 'add') {
@@ -340,7 +397,7 @@
             dataType: "JSON",
             success: function(data) {
                 $('#dataNominatif')[0].reset();
-                $('a#tab1').addClass('sr-only');
+                // $('a#tab1').addClass('sr-only');
                 table.ajax.reload(null, false);
                 $('a#tab1').tab('show');
                 $('.content-header').append('<div style="margin: 15px 0 0 0;" class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i> Berhasil!</h4>Data telah disimpan.</div>');
@@ -365,7 +422,7 @@
                     data: {
                         id: list_id
                     },
-                    url: "<?php echo site_url('admin/hapus_surat_keluar') ?>",
+                    url: "<?php echo site_url('admin/hapus_data_nominatif') ?>",
                     dataType: "JSON",
                     success: function(data) {
                         if (data.status) {

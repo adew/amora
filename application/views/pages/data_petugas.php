@@ -60,7 +60,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label>Kata Sandi</label>
-                                    <input type="password" name="input2" id="pw1" class="form-control" />
+                                    <input type="password" name="input2" id="pw1" pattern=".{5,10}" required class="form-control" />
                                 </div>
                                 <!-- <div class="form-group">
                                     <label>Jenis Kelamin</label>
@@ -122,14 +122,14 @@
 
 </div>
 
-
+<!-- 
 <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/iCheck/icheck.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 <script>
     var save_method;
@@ -150,6 +150,11 @@
             $(this).tab('show');
             $('#deleteList').hide();
             $('a#tab1').removeClass('sr-only');
+            $('#petugas')[0].reset();
+        });
+
+        $('#resetBtn').click(function(e) {
+            e.preventDefault();
             $('#petugas')[0].reset();
         });
 
@@ -204,7 +209,6 @@
     function save() {
 
         var url;
-
         if (save_method == 'add') {
             url = "<?php echo site_url('admin/tambah_petugas') ?>";
         } else {

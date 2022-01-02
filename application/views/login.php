@@ -9,6 +9,7 @@ echo link_tag('assets/font-awesome/css/font-awesome.min.css');
 echo link_tag('assets/iCheck/square/blue.css');
 
 ?>
+<link rel="shortcut icon" href=<?= base_url('favicon.ico') ?> type="image/x-icon">
 <style>
   html {
     position: relative;
@@ -17,7 +18,7 @@ echo link_tag('assets/iCheck/square/blue.css');
 
   body {
     margin-bottom: 60px;
-    padding-top: 40px;
+    /* padding-top: 40px; */
     padding-bottom: 40px;
     background-color: #eee;
   }
@@ -109,25 +110,32 @@ echo link_tag('assets/iCheck/square/blue.css');
   .text-red {
     color: #dd4b39;
   }
+
+  .bg-red {
+    color: #fff;
+    background-color: #dd4b39;
+    /* height: 50px; */
+  }
 </style>
+
 </head>
 
 <body>
+  <div class="row bg-red">
+    <div class="col-md-12 text-center text-white">
+      <h2 id="header-text"><b>APLIKASI PENGARSIPAN DAN MONITORING KEPANITERAAN</b></h2>
+      <h2 style="font-family: 'Courier New', Courier, monospace;"><b>PENGADILAN MILITER III-18 AMBON </b></h2>
 
+    </div>
+  </div>
   <div class="container">
     <div id="login-box">
       <div class="text-center">
-
-        <h2 class="form-signin-heading"><b><span class="text-red">AMORA</span></b></h2>
+        <!-- C:\xampp\htdocs\amora\assets\adminlte\img -->
+        <img src="<?= base_url('assets\adminlte\img\logo.png') ?>" class="logo" style="width: 200px; height: 200px;">
+        <!-- <h2 class="form-signin-heading"><b><span class="text-red">AMORA</span></b></h2>
         <h1 id="login-box-logo" class="text-red">
-          <!-- <i class="fa fa-2x fa-database"></i> -->
-          <!-- <i class="fa fa-2x fa-folder-open"></i> -->
-          <i class="fa fa-2x fa-copy"></i>
-          <!-- <i class="fa fa-2x fa-file-pdf-o"></i>
-          <i class="fa fa-2x fa-file-word-o"></i>
-          <i class="fa fa-2x fa-file-excel-o"></i>
-          <i class="fa fa-2x fa-file-photo-o"></i> -->
-        </h1>
+        </h1> -->
         <div id="infoMsg" class="text-danger"><?php echo $message ?></div>
       </div>
 
@@ -150,7 +158,7 @@ echo link_tag('assets/iCheck/square/blue.css');
   <footer class="text-center">
     <div class="container">
       <span class="text-muted">
-        Copyright &copy; 2021 | <a href="https://dilmil-ambon.go.id/en/" target="_blank">Dilmil III-18 Ambon</a>
+        Copyright &copy; 2021 | Developed By <a href="https://www.instagram.com/adew77_/" target="_blank"><b>Ade Widianto</b></a>
 
       </span>
     </div>

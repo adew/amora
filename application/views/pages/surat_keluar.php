@@ -17,7 +17,7 @@
             <i class="fa fa-chevron-left"></i> Kembali
         </a>
         <button id="deleteList" disabled="disabled" class="btn btn-danger" onclick="deleteList()"><i class="fa fa-trash"></i> Hapus</button>
-        <a data-toggle="collapse" class="btn btn-success" href="#collapseOne" style="color: white;">
+        <a data-toggle="collapse" id="buttonLaporan" class="btn btn-success" href="#collapseOne" style="color: white;">
             <i class="fa fa-file-pdf-o"></i> Buat Laporan
         </a>
         <div class="tab-content">
@@ -71,12 +71,13 @@
                                         <th>No. Surat</th>
                                         <th>Tgl Surat</th>
                                         <th>Perihal</th>
-                                        <th>Pengirim</th>
                                         <th>Tujuan Surat</th>
-                                        <th>Jenis Surat</th>
+                                        <!-- <th>Jenis Surat</th> -->
                                         <!-- <th>Sifat Surat</th> -->
+                                        <th>Tgl Pengiriman</th>
                                         <th>Keterangan</th>
-                                        <th>Petugas</th>
+                                        <th>Berkas</th>
+                                        <!-- <th>Petugas</th> -->
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -98,12 +99,6 @@
                                         <label>No. Surat</label>
                                         <input type="text" name="no_surat" class="form-control" />
                                     </div>
-
-                                    <div class="form-group">
-                                        <label>Perihal</label>
-                                        <input type="text" name="perihal" class="form-control" />
-                                    </div>
-
                                     <div class="form-group">
                                         <label>Tanggal Surat</label>
                                         <div class="input-group">
@@ -113,20 +108,33 @@
                                             </div>
                                         </div>
                                     </div>
-
-                                    <div class="form-group">
-                                        <label>Pengirim</label>
-                                        <input type="text" name="pengirim" class="form-control" />
-                                    </div>
                                     <div class="form-group">
                                         <label>Tujuan Surat</label>
                                         <input type="text" name="ditujukan" class="form-control" />
                                     </div>
+                                    <div class="form-group">
+                                        <label>Perihal</label>
+                                        <input type="text" name="perihal" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Tanggal Pengiriman</label>
+                                        <div class="input-group">
+                                            <input type="text" name="tgl_pengiriman" id="inputTglPengiriman" class="form-control" />
+                                            <div class="input-group-addon">
+                                                <span class="fa fa-calendar"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="form-group">
+                                        <label>Pengirim</label>
+                                        <input type="text" name="pengirim" class="form-control" />
+                                    </div> -->
 
                                 </div>
 
                                 <div class="col-md-6">
-                                    <div class="form-group">
+                                    <input type="hidden" name="jenis_surat" value="1" />
+                                    <!-- <div class="form-group">
                                         <label>Jenis Surat</label>
                                         <select name="jenis_surat" class="form-control">
                                             <option value="" selected="selected">-- Jenis Surat --</option>
@@ -136,27 +144,22 @@
                                             }
                                             ?>
                                         </select>
-                                    </div>
+                                    </div> -->
                                     <div class="form-group">
                                         <label>Keterangan</label>
                                         <textarea name="deskripsi" class="form-control" rows="2"></textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>Petugas</label>
                                         <input value="<?php echo $nama_lengkap ?>" class="form-control" disabled="disabled" />
-                                    </div>
-
-                                    <!-- <div class="form-group">
-                                        <label>Sifat Surat</label>
-                                        <select name="sifat_surat" class="form-control">
-                                            <option value="" selected="selected">-- Sifat Surat --</option>
-                                            <option value="Rahasia">Rahasia</option>
-                                            <option value="Penting">Penting</option>
-                                            <option value="Segera">Segera</option>
-                                            <option value="Biasa">Biasa</option>
-
-                                        </select>
                                     </div> -->
+                                    <div class="form-group">
+                                        <label id="label-photo">Berkas</label>
+                                        <div>
+                                            <input name="berkas_surat" type="file">
+                                            <span class="help-block"></span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
@@ -177,13 +180,13 @@
 </div>
 
 
-<script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/js/moment.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 <script>
     var table;
@@ -192,6 +195,7 @@
         $('a#tab1').click(function(e) {
             e.preventDefault();
             $('#deleteList').show();
+            $('#buttonLaporan').show();
             $(this).tab('show');
             $(this).addClass('sr-only');
         });
@@ -201,7 +205,13 @@
             save_method = 'add';
             $(this).tab('show');
             $('#deleteList').hide();
+            $('#buttonLaporan').hide();
             $('a#tab1').removeClass('sr-only');
+        });
+
+        $('#resetBtn').click(function(e) {
+            e.preventDefault();
+            $('#suratKeluar')[0].reset();
         });
 
         table = $('#surat_keluar').DataTable({
@@ -211,7 +221,7 @@
             "order": [],
 
             "ajax": {
-                "url": "<?php echo site_url('Admin/get_surat_keluar'); ?>",
+                "url": "<?php echo site_url('admin/get_surat_keluar'); ?>",
                 "type": "POST"
             },
 
@@ -239,6 +249,12 @@
         });
 
         $('#inputTglSurat').datepicker({
+            autoclose: true,
+            format: 'yyyy-mm-dd',
+            todayHighlight: true,
+            orientation: "bottom"
+        });
+        $('#inputTglPengiriman').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
             todayHighlight: true
@@ -343,15 +359,17 @@
         } else {
             url = "<?php echo site_url('admin/update_surat_keluar') ?>";
         }
-
+        var formData = new FormData($('#suratKeluar')[0]);
         $.ajax({
             url: url,
             type: "POST",
-            data: $('#suratKeluar').serialize(),
+            data: formData,
+            contentType: false,
+            processData: false,
             dataType: "JSON",
             success: function(data) {
                 $('#suratKeluar')[0].reset();
-                $('a#tab1').addClass('sr-only');
+                // $('a#tab1').addClass('sr-only');
                 table.ajax.reload(null, false);
                 $('a#tab1').tab('show');
                 $('.content-header').append('<div style="margin: 15px 0 0 0;" class="alert alert-success alert-dismissible"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button><h4><i class="icon fa fa-check"></i> Berhasil!</h4>Data telah disimpan.</div>');

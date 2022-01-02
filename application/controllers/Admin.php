@@ -16,7 +16,8 @@ class Admin extends CI_Controller
             'model_konsep'
         ));
 
-        if (!$this->ion_auth->logged_in() || !$this->ion_auth->is_admin()) {
+        // if (!$this->ion_auth->logged_in() && !$this->ion_auth->is_admin()) {
+        if (!$this->ion_auth->logged_in()) {
             redirect('/', 'refresh');
         }
     }
@@ -26,10 +27,10 @@ class Admin extends CI_Controller
         $this->load->library('table');
         $user = $this->ion_auth->user()->row();
 
-        $data['title'] = 'Admin Dashboard';
+        $data['title'] = 'Dashboard Surat';
         $data['nama_lengkap'] = $user->nama_petugas;
 
-        $this->db->select('no_surat, tgl_surat, perihal, pengirim, ditujukan, jenis_surat, sifat_surat, username, dibuat_pada');
+        $this->db->select('no_surat, tgl_surat, perihal, pengirim, username, dibuat_pada');
         $this->db->order_by('dibuat_pada', 'DESC');
         $this->db->limit(10);
         $data['surat_masuk'] = $this->db->get('v_surat_masuk');
@@ -122,14 +123,14 @@ class Admin extends CI_Controller
             $row[] = $field->tgl_surat;
             $row[] = $field->perihal;
             $row[] = $field->pengirim;
-            $row[] = $field->jenis_surat;
+            // $row[] = $field->jenis_surat;
             $row[] = $field->deskripsi;
-            $row[] = $field->username;
-            if ($field->berkas_surat) {
-                $row[] = '<a href="' . base_url('uploads/' . $field->berkas_surat) . '" target="_blank"><i>' . $field->berkas_surat . '</i></a>';
-            } else {
-                $row[] = '(No file)';
-            }
+            // $row[] = $field->username;
+            // if ($field->berkas_surat) {
+            //     $row[] = '<a href="' . base_url('uploads/f_surat/' . $field->berkas_surat) . '" target="_blank"><i>' . $field->berkas_surat . '</i></a>';
+            // } else {
+            //     $row[] = '(No file)';
+            // }
             // $row[] = $field->sifat_surat;
             // $row[] = $field->status_disposisi;
             $row[] = form_button('ajaxUpdateBtn', 'Edit', 'class="btn btn-default" onclick="editSuratMasuk(' . $field->id . ')"');
@@ -162,14 +163,12 @@ class Admin extends CI_Controller
             'ditujukan' => $this->input->post('ditujukan'),
             'deskripsi' => $this->input->post('deskripsi'),
             'id_petugas' => $user->id,
-            'sifat_surat' => $this->input->post('sifat_surat'),
-            'status_disposisi' => $this->input->post('status_disposisi'),
             'dibuat_pada' => time(),
         );
 
         if (!empty($_FILES['berkas_surat']['name'])) {
             $upload = $this->_do_upload();
-            $data['berkas_surat'] = $upload;
+            $data['berkas_surat'] =  $upload;
         }
 
         $insert = $this->model_surat_masuk->save($data);
@@ -195,8 +194,6 @@ class Admin extends CI_Controller
             'ditujukan' => $this->input->post('ditujukan'),
             'deskripsi' => $this->input->post('deskripsi'),
             'id_petugas' => $user->id,
-            'sifat_surat' => $this->input->post('sifat_surat'),
-            'status_disposisi' => $this->input->post('status_disposisi'),
         );
 
         if (!empty($_FILES['berkas_surat']['name'])) {
@@ -213,8 +210,10 @@ class Admin extends CI_Controller
         $list_id = $this->input->post('id');
         $query = $this->model_surat_masuk->get_by_all($list_id);
         foreach ($query as $row) {
-            $path = './uploads/' . $row->berkas_surat;
+            $path = './uploads/f_surat/' . $row->berkas_surat;
             if (unlink($path)) {
+                $this->model_surat_masuk->delete_by_id($row->id_surat_masuk);
+            } else {
                 $this->model_surat_masuk->delete_by_id($row->id_surat_masuk);
             }
         }
@@ -234,12 +233,16 @@ class Admin extends CI_Controller
             $row[] = $field->no_surat;
             $row[] = $field->tgl_surat;
             $row[] = $field->perihal;
-            $row[] = $field->pengirim;
+            // $row[] = $field->pengirim;
             $row[] = $field->kepada;
-            $row[] = $field->jenis_surat;
-            // $row[] = $field->sifat_surat;
+            $row[] = $field->tgl_pengiriman;
             $row[] = $field->deskripsi;
-            $row[] = $field->petugas;
+            if ($field->berkas_surat) {
+                $row[] = '<a href="' . base_url('uploads/f_surat/' . $field->berkas_surat) . '" target="_blank"><i>' . $field->berkas_surat . '</i></a>';
+            } else {
+                $row[] = '(No file)';
+            }
+            // $row[] = $field->petugas;
             $row[] = form_button('ajaxUpdateBtn', 'Edit', 'class="btn btn-default" onclick="editSuratKeluar(' . $field->id . ')"');
 
             $data[] = $row;
@@ -261,15 +264,21 @@ class Admin extends CI_Controller
         $data = array(
             'no_surat' => $this->input->post('no_surat'),
             'tgl_surat' => $this->input->post('tgl_surat'),
+            'tgl_pengiriman' => $this->input->post('tgl_pengiriman'),
             'perihal' => $this->input->post('perihal'),
             'id_jenis_surat' => $this->input->post('jenis_surat'),
-            'pengirim' => $this->input->post('pengirim'),
+            // 'pengirim' => $this->input->post('pengirim'),
             'kepada' => $this->input->post('ditujukan'),
             'deskripsi' => $this->input->post('deskripsi'),
             'id_petugas' => $user->id,
-            'sifat_surat' => $this->input->post('sifat_surat'),
             'dibuat_pada' => time(),
         );
+
+        if (!empty($_FILES['berkas_surat']['name'])) {
+            $upload = $this->_do_upload();
+            $data['berkas_surat'] = $upload;
+        }
+
 
         $this->model_surat_keluar->save($data);
         echo json_encode(array("status" => TRUE));
@@ -286,14 +295,20 @@ class Admin extends CI_Controller
         $data = array(
             'no_surat' => $this->input->post('no_surat'),
             'tgl_surat' => $this->input->post('tgl_surat'),
+            'tgl_pengiriman' => $this->input->post('tgl_pengiriman'),
             'perihal' => $this->input->post('perihal'),
             'id_jenis_surat' => $this->input->post('jenis_surat'),
-            'pengirim' => $this->input->post('pengirim'),
+            // 'pengirim' => $this->input->post('pengirim'),
             'kepada' => $this->input->post('ditujukan'),
             'deskripsi' => $this->input->post('deskripsi'),
             'id_petugas' => $this->ion_auth->user()->row()->id,
             'sifat_surat' => $this->input->post('sifat_surat'),
         );
+
+        if (!empty($_FILES['berkas_surat']['name'])) {
+            $upload = $this->_do_upload();
+            $data['berkas_surat'] = $upload;
+        }
 
         $this->model_surat_keluar->update(array('id_surat_keluar' => $this->input->post('id_surat_keluar')), $data);
         echo json_encode(array("status" => TRUE));
@@ -302,8 +317,18 @@ class Admin extends CI_Controller
     public function hapus_surat_keluar()
     {
         $list_id = $this->input->post('id');
-        foreach ($list_id as $id) {
-            $this->model_surat_keluar->delete_by_id($id);
+        $query = $this->model_surat_keluar->get_by_all($list_id);
+        // foreach ($list_id as $id) {
+        //     $this->model_surat_keluar->delete_by_id($id);
+        // }
+
+        foreach ($query as $row) {
+            $path = './uploads/f_surat/' . $row->berkas_surat;
+            if (unlink($path)) {
+                $this->model_surat_keluar->delete_by_id($row->id_surat_keluar);
+            } else {
+                $this->model_surat_keluar->delete_by_id($row->id_surat_keluar);
+            }
         }
         echo json_encode(array("status" => TRUE));
     }
@@ -311,7 +336,8 @@ class Admin extends CI_Controller
     //MENU NOMINATIF PERKARA
     public function get_data_nominatif()
     {
-        $list = $this->model_surat_keluar->get_datatables();
+        $list = $this->model_data_nominatif->get_datatables();
+
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $field) {
@@ -319,27 +345,86 @@ class Admin extends CI_Controller
             $row = array();
             $row[] = '<input type="checkbox" class="data-check" value="' . $field->id . '" onclick="enableDeleteBtn()"/>';
             $row[] = $no;
-            $row[] = $field->no_surat;
-            $row[] = $field->tgl_surat;
-            $row[] = $field->perihal;
-            $row[] = $field->pengirim;
-            $row[] = $field->kepada;
-            $row[] = $field->jenis_surat;
-            // $row[] = $field->sifat_surat;
-            $row[] = $field->deskripsi;
-            $row[] = $field->petugas;
-            $row[] = form_button('ajaxUpdateBtn', 'Edit', 'class="btn btn-default" onclick="editSuratKeluar(' . $field->id . ')"');
+            $row[] = $field->tahun;
+            $row[] = $this->bulan($field->bulan);
+            $row[] = $field->jenis;
+            $row[] = $this->pelaku($field->pelaku);
+            $row[] = $field->jml_perkara_masuk;
+            $row[] = $field->jml_perkara_putus;
+            $row[] = form_button('ajaxUpdateBtn', 'Edit', 'class="btn btn-default" onclick="editDataNominatif(' . $field->id . ')"');
 
             $data[] = $row;
         }
 
         $output = array(
             "draw" => $_POST['draw'],
-            "recordsTotal" => $this->model_surat_keluar->count_all(),
-            "recordsFiltered" => $this->model_surat_keluar->count_filtered(),
+            "recordsTotal" => $this->model_data_nominatif->count_all(),
+            "recordsFiltered" => $this->model_data_nominatif->count_filtered(),
             "data" => $data,
         );
+
         echo json_encode($output);
+    }
+
+    private function pelaku($plk)
+    {
+        $pelaku = $plk;
+        switch ($pelaku) {
+            case 1:
+                $pelaku = "TNI-AD";
+                break;
+            case 2:
+                $pelaku = "TNI-AL";
+                break;
+            case 3:
+                $pelaku = "TNI-AU";
+                break;
+        }
+        return $pelaku;
+    }
+
+    private function bulan($bln)
+    {
+        $bulan = $bln;
+        switch ($bulan) {
+            case 1:
+                $bulan = "Januari";
+                break;
+            case 2:
+                $bulan = "Februari";
+                break;
+            case 3:
+                $bulan = "Maret";
+                break;
+            case 4:
+                $bulan = "April";
+                break;
+            case 5:
+                $bulan = "Mei";
+                break;
+            case 6:
+                $bulan = "Juni";
+                break;
+            case 7:
+                $bulan = "Juli";
+                break;
+            case 8:
+                $bulan = "Agustus";
+                break;
+            case 9:
+                $bulan = "September";
+                break;
+            case 10:
+                $bulan = "Oktober";
+                break;
+            case 11:
+                $bulan = "November";
+                break;
+            case 12:
+                $bulan = "Desember";
+                break;
+        }
+        return $bulan;
     }
 
     public function input_data_nominatif()
@@ -351,37 +436,34 @@ class Admin extends CI_Controller
             'bulan' => $this->input->post('bulan'),
             'jenis' => $this->input->post('jenis'),
             'pelaku' => $this->input->post('pelaku'),
-            'jml_perkara_masuk' => $this->input->post('jumlah_perkara_masuk'),
-            'jml_perkara_putus' => $this->input->post('jumlah_perkara_putus'),
+            'jml_perkara_masuk' => $this->input->post('jml_perkara_masuk'),
+            'jml_perkara_putus' => $this->input->post('jml_perkara_putus'),
             'dibuat_pada' => time()
         );
-        // print_r($data);
-        // die;
+
         $this->model_data_nominatif->save($data);
         echo json_encode(array("status" => TRUE));
     }
 
     public function edit_data_nominatif($id)
     {
-        $data = $this->model_surat_keluar->get_by_id($id);
+        $data = $this->model_data_nominatif->get_by_id($id);
         echo json_encode($data);
     }
 
-    public function updat_data_nominatif()
+    public function update_data_nominatif()
     {
         $data = array(
-            'no_surat' => $this->input->post('no_surat'),
-            'tgl_surat' => $this->input->post('tgl_surat'),
-            'perihal' => $this->input->post('perihal'),
-            'id_jenis_surat' => $this->input->post('jenis_surat'),
-            'pengirim' => $this->input->post('pengirim'),
-            'kepada' => $this->input->post('ditujukan'),
-            'deskripsi' => $this->input->post('deskripsi'),
-            'id_petugas' => $this->ion_auth->user()->row()->id,
-            'sifat_surat' => $this->input->post('sifat_surat'),
+            'tahun' => $this->input->post('tahun'),
+            'bulan' => $this->input->post('bulan'),
+            'jenis' => $this->input->post('jenis'),
+            'pelaku' => $this->input->post('pelaku'),
+            'jml_perkara_masuk' => $this->input->post('jml_perkara_masuk'),
+            'jml_perkara_putus' => $this->input->post('jml_perkara_putus'),
+            'dibuat_pada' => time()
         );
 
-        $this->model_surat_keluar->update(array('id_surat_keluar' => $this->input->post('id_surat_keluar')), $data);
+        $this->model_data_nominatif->update(array('id' => $this->input->post('id_data_nominatif')), $data);
         echo json_encode(array("status" => TRUE));
     }
 
@@ -389,7 +471,7 @@ class Admin extends CI_Controller
     {
         $list_id = $this->input->post('id');
         foreach ($list_id as $id) {
-            $this->model_surat_keluar->delete_by_id($id);
+            $this->model_data_nominatif->delete_by_id($id);
         }
         echo json_encode(array("status" => TRUE));
     }
@@ -624,11 +706,11 @@ class Admin extends CI_Controller
     }
 
 
-    private function _do_upload($file_name = FALSE, $file_post = 'berkas_surat')
+    private function _do_upload($file_name = FALSE, $file_post = 'berkas_surat', $nama_folder = 'f_surat')
     {
         $this->load->helper('string');
 
-        $config['upload_path'] = 'uploads/';
+        $config['upload_path'] = 'uploads/' . $nama_folder . '/';
         $config['allowed_types'] = 'jpg|png|pdf|docx';
         $config['max_size'] = 80000; //set max size allowed in Kilobyte
         if ($file_name == FALSE) {
@@ -671,12 +753,12 @@ class Admin extends CI_Controller
 
         $prefs = array(
             'format' => 'zip',
-            'filename' => 'db_pengarsipan_surat.sql'
+            'filename' => 'db_amora.sql'
         );
 
         $backup = &$this->dbutil->backup($prefs);
 
-        $db_name = 'db-pengarsipan-surat-' . date("Y-m-d") . '.zip';
+        $db_name = 'db-amora-' . date("Y-m-d") . '.zip';
         $save = 'pathtobkfolder/' . $db_name;
 
         $this->load->helper('file');
@@ -719,16 +801,17 @@ class Admin extends CI_Controller
                     $color = 'aqua';
                     break;
             }
-            $no++;
+            // $no++;
+            $no = explode('-', $field->no_reg);
             $row = array();
             $row[] = '<div class="col-md-4 col-xl-2">
                 <div class="small-box bg-' . $color . '">
                 <div class="inner">
                     <h4>' . $field->no_reg . '</h4>
-                    <p>' . $field->nama . '</p>
+                    <p><b>' . $field->nama . '</b></p>
                 </div>
                 <div class="icon">
-                    <i>' . $no . '</i>
+                    <i>' . $no[0] . '</i>
                 </div>
                 <a href="#" onclick="showModal(' . $field->id_konsep . ')" class="small-box-footer">Selengkapnya <i class="fa fa-arrow-circle-right"></i></a>
                  </div>
@@ -760,7 +843,7 @@ class Admin extends CI_Controller
         );
 
         if (!empty($_FILES['berkas_konsep']['name'])) {
-            $upload = $this->_do_upload($noreg, 'berkas_konsep');
+            $upload = $this->_do_upload($noreg, 'berkas_konsep', 'f_konsep');
             $data['berkas_konsep'] = $upload;
         }
 
@@ -769,56 +852,56 @@ class Admin extends CI_Controller
     }
 
 
-    public function edit_konsep($id)
-    {
-        $data = $this->model_konsep->get_by_id($id);
-        echo json_encode($data);
-    }
+    // public function edit_konsep($id)
+    // {
+    //     $data = $this->model_konsep->get_by_id($id);
+    //     echo json_encode($data);
+    // }
 
-    public function update_konsep()
-    {
-        $user = $this->ion_auth->user()->row();
-        $data = array(
-            'no_surat' => $this->input->post('no_surat'),
-            'tgl_surat' => $this->input->post('tgl_surat'),
-            'perihal' => $this->input->post('perihal'),
-            'id_jenis_surat' => $this->input->post('jenis_surat'),
-            'pengirim' => $this->input->post('pengirim'),
-            'ditujukan' => $this->input->post('ditujukan'),
-            'deskripsi' => $this->input->post('deskripsi'),
-            'id_petugas' => $user->id,
-            'sifat_surat' => $this->input->post('sifat_surat'),
-            'status_disposisi' => $this->input->post('status_disposisi'),
-        );
+    // public function update_konsep()
+    // {
+    //     $user = $this->ion_auth->user()->row();
+    //     $data = array(
+    //         'no_surat' => $this->input->post('no_surat'),
+    //         'tgl_surat' => $this->input->post('tgl_surat'),
+    //         'perihal' => $this->input->post('perihal'),
+    //         'id_jenis_surat' => $this->input->post('jenis_surat'),
+    //         'pengirim' => $this->input->post('pengirim'),
+    //         'ditujukan' => $this->input->post('ditujukan'),
+    //         'deskripsi' => $this->input->post('deskripsi'),
+    //         'id_petugas' => $user->id,
+    //         'sifat_surat' => $this->input->post('sifat_surat'),
+    //         'status_disposisi' => $this->input->post('status_disposisi'),
+    //     );
 
-        if (!empty($_FILES['berkas_surat']['name'])) {
-            $upload = $this->_do_upload();
-            $data['berkas_surat'] = $upload;
-        }
+    //     if (!empty($_FILES['berkas_surat']['name'])) {
+    //         $upload = $this->_do_upload();
+    //         $data['berkas_surat'] = $upload;
+    //     }
 
-        $this->model_konsep->update(array('id_konsep' => $this->input->post('id_konsep')), $data);
-        echo json_encode(array("status" => TRUE));
-    }
+    //     $this->model_konsep->update(array('id_konsep' => $this->input->post('id_konsep')), $data);
+    //     echo json_encode(array("status" => TRUE));
+    // }
 
     public function hapus_konsep()
     {
         $id = $this->input->post('id');
-        // $this->model_konsep->delete_by_id_array($list_id);
-        // foreach ($list_id as $id) {
-        // $this->model_konsep->delete_by_id($id);
-        // }
+
         $row = $this->model_konsep->get_by_id($id);
-        $path = './uploads/' . $row->berkas_konsep;
+        $path = './uploads/f_konsep/' . $row->berkas_konsep;
+        chown($path, 777);
         if (unlink($path)) {
             $this->model_konsep->delete_by_id($row->id_konsep);
+            echo json_encode(array("status" => TRUE));
+        } else {
+            echo json_encode(array("status" => FALSE));
         }
-        echo json_encode(array("status" => TRUE));
-    
     }
+
 
     public function dashboard_nominatif($tahun = null)
     {
-        if(empty($tahun))
+        if (empty($tahun))
             $tahun = date('Y');
 
         $user = $this->ion_auth->user()->row();
@@ -832,28 +915,31 @@ class Admin extends CI_Controller
         $nominatif = $this->NominatifModel->getStatistic($tahun);
 
         $datanominatif = array();
-        foreach($nominatif as $row){
-            $datanominatif[$row['jenis']][$row['pelaku']][$row['bulan']] =$row;
+        foreach ($nominatif as $row) {
+            $datanominatif[$row['jenis']][$row['pelaku']][$row['bulan']] = $row;
         }
-
-        $data['nominatif'] = $datanominatif;    
+        // print_r($nominatif);
+        // die;
+        $data['nominatif'] = $datanominatif;
 
         $nominatif_sebelum = $this->NominatifModel->getLastYear($tahun);
         $datanominatif_sebelum = array();
-        foreach($nominatif_sebelum as $row){
-            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] =$row['jml_perkara_masuk'] - $row['jml_perkara_putus'];
+        foreach ($nominatif_sebelum as $row) {
+            $datanominatif_sebelum[$row['jenis']][$row['pelaku']] = $row['jml_perkara_masuk'] - $row['jml_perkara_putus'];
         }
 
         $nominatif_sebelum = $this->NominatifModel->getLastYear($tahun - 1);
-        foreach($nominatif_sebelum as $row){
+        foreach ($nominatif_sebelum as $row) {
             $datanominatif_sebelum[$row['jenis']][$row['pelaku']] = $datanominatif_sebelum[$row['jenis']][$row['pelaku']] + ($row['jml_perkara_masuk'] - $row['jml_perkara_putus']);
         }
 
         $data['nominatif_sebelum'] = $datanominatif_sebelum;
-        
-        $data['jenis'] = $this->NominatifModel::$jenis;
-        $data['pelaku'] = $this->NominatifModel::$pelaku;
-        $data['bulan'] = $this->NominatifModel::$bulan;
+
+
+
+        $data['jenis'] = $this->NominatifModel->jenis();
+        $data['pelaku'] = $this->NominatifModel->pelaku();
+        $data['bulan'] = $this->NominatifModel->bulan();
         $data['tahun'] = $tahun;
 
         $this->load->view('includes/header', $data);

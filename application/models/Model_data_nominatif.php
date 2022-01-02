@@ -3,35 +3,47 @@
 class Model_data_nominatif extends CI_Model
 {
 	var $table = 'nominatif';
-	var $column_order = array(null, null, 'no_surat', 'tgl_surat', 'perihal', 'pengirim', 'kepada', 'jenis_surat', 'sifat_surat', 'petugas', 'deskripsi', null);
-	var $column_search = array('no_surat', 'tgl_surat', 'perihal', 'pengirim', 'kepada', 'jenis_surat', 'sifat_surat', 'petugas', 'deskripsi');
+	var $column_order = array(null, null, 'tahun', 'bulan', 'jenis', 'pelaku', 'jml_perkara_masuk', 'jml_perkara_putus', null);
+	var $column_search = array('tahun', 'bulan', 'jenis', 'pelaku', 'jml_perkara_masuk', 'jml_perkara_putus');
 	var $order = array('id' => 'asc');
 
-	public static $jenis = array(
-		'kejahatan' => 'Kejahatan',
-		'pelanggaran' => 'Pelanggaran'
-	);
+	public function jenis()
+	{
+		$jenis = array(
+			'kejahatan' => 'Kejahatan',
+			'pelanggaran' => 'Pelanggaran'
+		);
+		return $jenis;
+	}
 
-	public static $pelaku = array(
-		'1' => 'TNI AD',
-		'2' => 'TNI AL',
-		'3' => 'TNI AU'
-	);
+	public function pelaku()
+	{
+		$pelaku = array(
+			'1' => 'TNI AD',
+			'2' => 'TNI AL',
+			'3' => 'TNI AU'
+		);
+		return $pelaku;
+	}
 
-	public static $bulan = array(
-		1 => 'Januari',
-		2 => 'Februari',
-		3 => 'Maret',
-		4 => 'April',
-		5 => 'Mei',
-		6 => 'Juni',
-		7 => 'Juli',
-		8 => 'Agustus',
-		9 => 'September',
-		10 => 'Oktober',
-		11 => 'November',
-		12 => 'Desember',
-	);
+	public function bulan()
+	{
+		$bulan = array(
+			1 => 'Januari',
+			2 => 'Februari',
+			3 => 'Maret',
+			4 => 'April',
+			5 => 'Mei',
+			6 => 'Juni',
+			7 => 'Juli',
+			8 => 'Agustus',
+			9 => 'September',
+			10 => 'Oktober',
+			11 => 'November',
+			12 => 'Desember',
+		);
+		return $bulan;
+	}
 
 
 	public function __construct()
@@ -99,7 +111,7 @@ class Model_data_nominatif extends CI_Model
 	public function get_by_id($id)
 	{
 		$this->db->from($this->table);
-		$this->db->where('id_surat_keluar', $id);
+		$this->db->where('id', $id);
 		$query = $this->db->get();
 
 		return $query->row();
@@ -119,11 +131,12 @@ class Model_data_nominatif extends CI_Model
 
 	public function delete_by_id($id)
 	{
-		$this->db->where('id_surat_keluar', $id);
+		$this->db->where('id', $id);
 		$this->db->delete($this->table);
 	}
 
-	public function getStatistic($tahun){
+	public function getStatistic($tahun)
+	{
 		$this->db->where('tahun', $tahun);
 		$this->db->from($this->table);
 
@@ -131,17 +144,18 @@ class Model_data_nominatif extends CI_Model
 
 		return $query->result_array();
 	}
-	
-	public function getLastYear($tahun){
+
+	public function getLastYear($tahun)
+	{
 		$tahun = $tahun - 1;
 
 		$sql = "select jenis, pelaku, sum(jml_perkara_masuk) jml_perkara_masuk, sum(jml_perkara_putus) jml_perkara_putus
 		 from nominatif
-		 where tahun = '".$tahun."'
+		 where tahun = '" . $tahun . "'
 		 group by jenis, pelaku";
 
-		 $query = $this->db->query($sql);
+		$query = $this->db->query($sql);
 
-		 return $query->result_array();
+		return $query->result_array();
 	}
 }

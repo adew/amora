@@ -158,11 +158,12 @@ class Laporan extends CI_Controller
                     'No',
                     'Nomor Surat',
                     'Tanggal Surat',
-                    'Perihal',
                     'Asal Surat',
+                    'Perihal',
                     // 'Kepada',
                     'Keterangan'
                 ));
+
 
                 $n = 1;
                 foreach ($this->model_laporan_surat_masuk->surat_masuk($start, $end, $s_disposisi) as $row) {
@@ -170,8 +171,8 @@ class Laporan extends CI_Controller
                         $n++,
                         $row->no_surat,
                         $row->tgl_surat,
-                        $row->perihal,
                         $row->pengirim,
+                        $row->perihal,
                         // $row->ditujukan,
                         $row->deskripsi
                     );
@@ -189,7 +190,7 @@ class Laporan extends CI_Controller
                     'Dari',
                     'Kepada',
                     'Perihal',
-                    'Jenis Surat',
+                    // 'Jenis Surat',
                     'Keterangan'
                 ));
 
@@ -202,7 +203,7 @@ class Laporan extends CI_Controller
                         $row->pengirim,
                         $row->kepada,
                         $row->perihal,
-                        $row->jenis_surat,
+                        // $row->jenis_surat,
                         $row->deskripsi
                     );
                 }

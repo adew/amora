@@ -15,7 +15,7 @@ class Auth extends CI_Controller
         if (!$this->ion_auth->logged_in()) {
             redirect('auth/login', 'refresh');
         } else if (!$this->ion_auth->is_admin()) {
-            redirect('petugas/surat_masuk', 'refresh');
+            redirect('admin/page/konsep_putusan', 'refresh');
         } else {
             redirect('admin', 'refresh');
         }
@@ -24,7 +24,7 @@ class Auth extends CI_Controller
     public function login()
     {
 
-        $data['title'] = 'ARDILA | Login';
+        $data['title'] = 'AMORA | Login';
 
         if ($this->ion_auth->logged_in()) {
             redirect('/');
@@ -72,7 +72,7 @@ class Auth extends CI_Controller
                 'name' => 'password',
                 'id' => 'inputPassword',
                 'required' => 'required',
-                'minlength' => 8,
+                'minlength' => 4,
                 'class' => 'form-control',
                 'placeholder' => 'Kata Sandi'
             );

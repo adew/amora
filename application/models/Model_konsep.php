@@ -75,6 +75,7 @@ class Model_konsep extends CI_Model
 	public function get_all()
 	{
 		$this->db->from($this->table);
+		$this->db->order_by('no_reg', 'asc');
 		$query = $this->db->get();
 		return $query->result();
 	}

@@ -86,7 +86,7 @@
                     <th>Perihal</th>
                     <th>Asal Surat</th>
                     <!-- <th>Kepada</th> -->
-                    <th>Jenis Surat</th>
+                    <!-- <th>Jenis Surat</th> -->
                     <!-- <th>Sifat</th> -->
                     <th>Petugas</th>
                     <th>Waktu</th>
@@ -101,7 +101,7 @@
                       <td><?php echo $row->perihal ?></td>
                       <td><?php echo $row->pengirim ?></td>
                       <!-- <td><?php echo $row->ditujukan ?></td> -->
-                      <td><?php echo $row->jenis_surat ?></td>
+                      <!-- <td><?php echo $row->jenis_surat ?></td> -->
                       <!-- <td><?php echo $row->sifat_surat ?></td> -->
                       <td><?php echo $row->username ?></td>
                       <td><?php echo timespan($row->dibuat_pada, time(), 2) ?> ago</td>
@@ -118,9 +118,9 @@
                     <th>No. Surat</th>
                     <th>Tanggal Surat</th>
                     <th>Perihal</th>
-                    <th>Pengirim</th>
+                    <!-- <th>Pengirim</th> -->
                     <th>Kepada</th>
-                    <th>Jenis Surat</th>
+                    <!-- <th>Jenis Surat</th> -->
                     <!-- <th>Sifat</th> -->
                     <th>Petugas</th>
                     <th>Waktu</th>
@@ -133,9 +133,9 @@
                       <td><?php echo $row->no_surat ?></td>
                       <td><?php echo $row->tgl_surat ?></td>
                       <td><?php echo $row->perihal ?></td>
-                      <td><?php echo $row->pengirim ?></td>
+                      <!-- <td><?php echo $row->pengirim ?></td> -->
                       <td><?php echo $row->kepada ?></td>
-                      <td><?php echo $row->jenis_surat ?></td>
+                      <!-- <td><?php echo $row->jenis_surat ?></td> -->
                       <!-- <td><?php echo $row->sifat_surat ?></td> -->
                       <td><?php echo $row->petugas ?></td>
                       <td><?php echo timespan($row->dibuat_pada, time(), 2) ?> ago</td>
@@ -156,12 +156,12 @@
 </div>
 
 
-<script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 
 

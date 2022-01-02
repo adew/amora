@@ -70,7 +70,7 @@ class Model_laporan_surat_keluar extends CI_Model
     public function surat_keluar($start, $end)
     {
 
-        $sql = "SELECT no_surat, tgl_surat, pengirim, kepada, perihal,jenis_surat,deskripsi FROM v_surat_keluar WHERE (tgl_surat BETWEEN ? AND ?)";
+        $sql = "SELECT no_surat, tgl_surat, pengirim, kepada, perihal,deskripsi FROM v_surat_keluar WHERE (tgl_surat BETWEEN ? AND ?)";
         $query = $this->db->query($sql, array($start, $end));
 
         return $query->result();

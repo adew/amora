@@ -17,7 +17,7 @@
             <i class="fa fa-chevron-left"></i> Kembali
         </a>
         <button id="deleteList" disabled="disabled" class="btn btn-danger" onclick="deleteList()"><i class="fa fa-trash"></i> Hapus</button>
-        <a data-toggle="collapse" class="btn btn-success" href="#collapseOne" style="color: white;">
+        <a id="buttonLaporan" data-toggle="collapse" class="btn btn-success" href="#collapseOne" style="color: white;">
             <i class="fa fa-file-pdf-o"></i> Buat Laporan
         </a>
         <div class="tab-content">
@@ -81,10 +81,10 @@
                                         <th>Tgl Surat</th>
                                         <th>Perihal</th>
                                         <th>Asal Surat</th>
-                                        <th>Jenis Surat</th>
+                                        <!-- <th>Jenis Surat</th> -->
                                         <th>Keterangan</th>
-                                        <th>Petugas</th>
-                                        <th>Berkas</th>
+                                        <!-- <th>Petugas</th> -->
+                                        <!-- <th>Berkas</th> -->
                                         <!-- <th>Sifat</th>
                                         <th>Status</th> -->
                                         <th>Action</th>
@@ -108,12 +108,6 @@
                                         <label>No. Surat</label>
                                         <input type="text" name="no_surat" class="form-control" />
                                     </div>
-
-                                    <div class="form-group">
-                                        <label>Perihal</label>
-                                        <input type="text" name="perihal" class="form-control" />
-                                    </div>
-
                                     <div class="form-group">
                                         <label>Tanggal Surat</label>
                                         <div class="input-group">
@@ -124,6 +118,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
+                                        <label>Asal Surat</label>
+                                        <input type="text" name="pengirim" class="form-control" />
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Perihal</label>
+                                        <input type="text" name="perihal" class="form-control" />
+                                    </div>
+                                    <input type="hidden" name="jenis_surat" value="1" />
+                                    <!-- <div class="form-group">
                                         <label>Jenis Surat</label>
                                         <select name="jenis_surat" class="form-control">
                                             <option value="" selected="selected">-- Jenis Surat --</option>
@@ -133,11 +136,7 @@
                                             }
                                             ?>
                                         </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label>Asal Surat</label>
-                                        <input type="text" name="pengirim" class="form-control" />
-                                    </div>
+                                    </div> -->
                                     <!-- <div class="form-group">
                                         <label>Ditujukan</label>
                                         <input type="text" name="ditujukan" class="form-control" />
@@ -147,9 +146,9 @@
 
                                     <div class="form-group">
                                         <label>Keterangan</label>
-                                        <textarea name="deskripsi" class="form-control" rows="2"></textarea>
+                                        <textarea name="deskripsi" class="form-control" rows="2">Dilaksanakan</textarea>
                                     </div>
-                                    <div class="form-group">
+                                    <!-- <div class="form-group">
                                         <label>Petugas</label>
                                         <input value="<?php echo $nama_lengkap ?>" class="form-control" disabled="disabled" />
                                     </div>
@@ -159,26 +158,7 @@
                                             <input name="berkas_surat" type="file">
                                             <span class="help-block"></span>
                                         </div>
-                                        <!-- <div class="form-group">
-                                            <label>Sifat Surat</label>
-                                            <select name="sifat_surat" class="form-control">
-                                                <option value="" selected="selected">-- Sifat Surat --</option>
-                                                <option value="Rahasia">Rahasia</option>
-                                                <option value="Penting">Penting</option>
-                                                <option value="Segera">Segera</option>
-                                                <option value="Biasa">Biasa</option>
-
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label>Status Disposisi</label>
-                                            <select name="status_disposisi" class="form-control">
-                                                <option value="" selected="selected">-- Status Disposisi --</option>
-                                                <option value="Sudah Disposisi">Sudah Disposisi</option>
-                                                <option value="Belum Disposisi">Belum Disposisi</option>
-                                            </select>
-                                        </div> -->
-                                    </div>
+                                    </div> -->
                                 </div>
                         </form>
 
@@ -198,13 +178,13 @@
 </div>
 
 
-<script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/js/moment.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 <script>
     var table;
@@ -213,6 +193,7 @@
         $('a#tab1').click(function(e) {
             e.preventDefault();
             $('#deleteList').show();
+            $('#buttonLaporan').show();
             $(this).tab('show');
             $(this).addClass('sr-only');
         });
@@ -222,6 +203,7 @@
             save_method = 'add';
             $(this).tab('show');
             $('#deleteList').hide();
+            $('#buttonLaporan').hide();
             $('a#tab1').removeClass('sr-only');
         });
 
@@ -232,7 +214,7 @@
             "order": [],
 
             "ajax": {
-                "url": "<?php echo site_url('Admin/get_surat_masuk'); ?>",
+                "url": "<?php echo site_url('admin/get_surat_masuk'); ?>",
                 "type": "POST"
             },
 
@@ -262,7 +244,8 @@
         $('#inputTglSurat').datepicker({
             autoclose: true,
             format: 'yyyy-mm-dd',
-            todayHighlight: true
+            todayHighlight: true,
+            orientation: "bottom"
         });
 
         $('[name="start"], [name="end"] ').datepicker({
@@ -270,6 +253,11 @@
             format: "yyyy-mm-dd",
             todayHighlight: true,
             orientation: "bottom"
+        });
+
+        $('#resetBtn').click(function(e) {
+            e.preventDefault();
+            $('#suratMasuk')[0].reset();
         });
     });
 
@@ -339,7 +327,7 @@
                 $('[name="no_surat"]').val(data.no_surat);
                 $('[name="tgl_surat"]').val(data.tgl_surat);
                 $('[name="perihal"]').val(data.perihal);
-                $('[name="jenis_surat"]').val(data.id_jenis_surat);
+                // $('[name="jenis_surat"]').val(data.id_jenis_surat);
                 $('[name="pengirim"]').val(data.pengirim);
                 $('[name="ditujukan"]').val(data.ditujukan);
                 $('[name="deskripsi"]').val(data.deskripsi);

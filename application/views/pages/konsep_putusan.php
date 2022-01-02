@@ -110,12 +110,12 @@
 </div>
 
 
-<script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/jquery-3.2.1.min.js'); ?>"></script>
+<script src="<?php echo base_url('assets/bootstrap/js/bootstrap.min.js'); ?>"></script> -->
 <script src="<?php echo base_url('assets/datatables/js/jquery.dataTables.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/datatables/js/dataTables.bootstrap.min.js'); ?>"></script>
 <script src="<?php echo base_url('assets/bootstrap-datepicker/js/bootstrap-datepicker.min.js'); ?>"></script>
-<script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script>
+<!-- <script src="<?php echo base_url('assets/adminlte/js/adminlte.min.js'); ?>"></script> -->
 
 <script>
     var table;
@@ -212,7 +212,7 @@
             type: "GET",
             dataType: "JSON",
             success: function(response) {
-                $("a#lampiran").attr("href", "<?php echo base_url('uploads/') ?>" + response.data.berkas_konsep);
+                $("a#lampiran").attr("href", "<?php echo base_url('uploads/f_konsep/') ?>" + response.data.berkas_konsep);
                 $('[name="idKonsep"]').val(id);
                 $('#noreg').text(response.data.no_reg);
                 $('#nama_tdw').text(response.data.nama);
@@ -336,7 +336,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="printBtn" class="btn btn-danger btn-flat" onclick="deleteList()"><i class="fa fa-trash"></i>&nbspHapus</button>
+                    <?php if ($this->ion_auth->is_admin()) { ?>
+                        <button type="button" id="printBtn" class="btn btn-danger btn-flat" onclick="deleteList()"><i class="fa fa-trash"></i>&nbspHapus</button>
+                    <?php } ?>
                     <button type="button" class="btn btn-primary btn-warning btn-flat" data-dismiss="modal">Kembali</button>
                 </div>
             </form>

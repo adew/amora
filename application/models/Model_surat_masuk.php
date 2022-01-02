@@ -3,7 +3,8 @@
 class Model_surat_masuk extends CI_Model
 {
 
-	var $table = 'v_surat_masuk';
+	var $table = 'surat_masuk';
+	var $id = 'id_surat_masuk';
 	var $column_order = array(null, null, 'no_surat', 'tgl_surat', 'perihal', 'jenis_surat', 'ditujukan', 'deskripsi', 'username', 'berkas_surat', 'sifat_surat', 'status_disposisi', null);
 	var $column_search = array('no_surat', 'tgl_surat', 'perihal', 'jenis_surat', 'ditujukan', 'deskripsi', 'username', 'berkas_surat', 'sifat_surat', 'status_disposisi');
 	var $order = array('id' => 'asc');
@@ -17,7 +18,7 @@ class Model_surat_masuk extends CI_Model
 	private function _get_datatables_query()
 	{
 
-		$this->db->from($this->table);
+		$this->db->from('v_surat_masuk');
 		$this->db->order_by('id', 'DESC');
 		$i = 0;
 
@@ -84,7 +85,7 @@ class Model_surat_masuk extends CI_Model
 	public function get_by_all($id)
 	{
 		$this->db->from('surat_masuk');
-		$this->db->where_in('id_surat_masuk', $id);
+		$this->db->where_in($this->id, $id);
 		$query = $this->db->get();
 
 		return $query->result();
@@ -92,31 +93,31 @@ class Model_surat_masuk extends CI_Model
 
 	public function save($data)
 	{
-		$this->db->insert('surat_masuk', $data);
+		$this->db->insert($this->table, $data);
 		return $this->db->insert_id();
 	}
 
 	public function update($where, $data)
 	{
-		$this->db->update('surat_masuk', $data, $where);
+		$this->db->update($this->table, $data, $where);
 		return $this->db->affected_rows();
 	}
 
 	public function delete_by_id($id)
 	{
-		$this->db->where('id_surat_masuk', $id);
-		$this->db->delete('surat_masuk');
+		$this->db->where($this->id, $id);
+		$this->db->delete($this->table);
 	}
 
 	public function delete_by_id_array($id)
 	{
-		$this->db->where_in('id_surat_masuk', $id);
-		$this->db->delete('surat_masuk');
+		$this->db->where_in($this->id, $id);
+		$this->db->delete($this->table);
 	}
 
 	public function status_disposisi($id, $data)
 	{
-		$this->db->update('surat_masuk', $data, $id);
+		$this->db->update($this->table, $data, $id);
 		return $this->db->affected_rows();
 	}
 }

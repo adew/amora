@@ -15,10 +15,10 @@ echo link_tag('assets/adminlte/css/skins/skin-green-light.min.css');
 echo link_tag('assets/adminlte/css/skins/_all-skins.min.css');
 
 ?>
-
-<script src="<?=base_url() ?>/assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
-<script src="<?=base_url() ?>/assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
-<script src="<?=base_url() ?>/assets/adminlte/js/adminlte.min.js" type="text/javascript"></script>
+<link rel="shortcut icon" href=<?= base_url('favicon.ico') ?> type="image/x-icon">
+<script src="<?= base_url() ?>assets/js/jquery-3.2.1.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="<?= base_url() ?>assets/adminlte/js/adminlte.min.js" type="text/javascript"></script>
 
 </head>
 <!-- <body class="hold-transition skin-blue-light sidebar-collapse sidebar-mini"> -->
@@ -30,10 +30,10 @@ echo link_tag('assets/adminlte/css/skins/_all-skins.min.css');
 
       <!-- Logo -->
       <a href="<?php echo site_url('admin') ?>" class="logo">
-        <span class="logo-mini">
-          <i class="fa fa-home"></i>
+        <span>
+          <img src="<?= base_url('assets\adminlte\img\logo.png') ?>" class="logo" style="width: 75px; height: 50px;"><b>AMORA</b>
         </span>
-        <span class="logo-lg"><b>AMORA</b></span>
+        <!-- <span class="logo-lg"><b>AMORA</b></span> -->
       </a>
 
       <nav class="navbar navbar-static-top" role="navigation">
@@ -51,7 +51,7 @@ echo link_tag('assets/adminlte/css/skins/_all-skins.min.css');
               </a>
               <ul class="dropdown-menu">
                 <li>
-                  <a href="<?php echo site_url('logout') ?>">
+                  <a href="<?php echo base_url('auth/logout') ?>">
                     <i class="fa fa-sign-out"></i>Keluar
                   </a>
                 </li>

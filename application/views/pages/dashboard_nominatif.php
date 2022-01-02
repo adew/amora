@@ -35,7 +35,7 @@
                                             <div class="clearfix"></div>
                                             <div class="table-responsive" style="margin-top: 40px;">
                                                 <table class="table table-bordered">
-                                                    <thead>
+                                                    <thead style="background-color: antiquewhite;">
                                                         <tr>
                                                             <th rowspan="2" class="text-center">PELAKU</th>
                                                             <th rowspan="2" class="text-center">SISA <br>TAHUN <br><?= $tahun - 1 ?></th>
@@ -51,15 +51,28 @@
                                                     <tbody>
                                                         <?php
                                                         $total = array();
+                                                        $total_sbl = array();
                                                         foreach ($pelaku as $kpelaku => $vpelaku) {
-                                                            $subtotal = $nominatif_sebelum[$kjenis][$kpelaku];
-                                                            $total['sebelum'] += $nominatif_sebelum[$kjenis][$kpelaku];
+                                                            // $subtotal = $nominatif_sebelum[$kjenis][$kpelaku];
+                                                            $subtotal = 0;
+                                                            $total_sbl['sebelum'] += $nominatif_sebelum[$kjenis][$kpelaku];
+                                                            switch ($vpelaku) {
+                                                                case "TNI AD":
+                                                                    $color = '#00a65a';
+                                                                    break;
+                                                                case "TNI AL":
+                                                                    $color = '#0073b7';
+                                                                    break;
+                                                                case "TNI AU":
+                                                                    $color = '#00c0ef';
+                                                                    break;
+                                                            }
                                                         ?>
-                                                            <tr>
+                                                            <tr style="background-color:<?= $color ?>">
                                                                 <td class="text-center"><strong><?= $vpelaku ?></strong></td>
                                                                 <td class="text-right"><?= $nominatif_sebelum[$kjenis][$kpelaku] ?></td>
                                                                 <?php foreach ($bulan as $kbulan => $vbulan) { ?>
-                                                                    <td class="text-right">
+                                                                    <td class="text-center">
                                                                         <?php
                                                                         echo number_format($nominatif[$kjenis][$kpelaku][$kbulan]['jml_perkara_' . $perkara]);
                                                                         $subtotal += $nominatif[$kjenis][$kpelaku][$kbulan]['jml_perkara_' . $perkara];
@@ -67,16 +80,16 @@
                                                                         ?>
                                                                     </td>
                                                                 <?php } ?>
-                                                                <td class="text-right"><?= number_format($subtotal) ?></td>
+                                                                <td class="text-center  text-bold"><?= number_format($subtotal) ?></td>
                                                             </tr>
                                                         <?php } ?>
-                                                        <tr>
+                                                        <tr style="background: orange;">
                                                             <td class="text-center"><strong>JUMLAH</strong></td>
-                                                            <td class="text-right"><?= number_format($total['sebelum']) ?></td>
+                                                            <td class="text-right"><?= number_format($total_sbl['sebelum']) ?></td>
                                                             <?php foreach ($bulan as $kbulan => $vbulan) { ?>
-                                                                <td class="text-right"><?= number_format($total[$kbulan]) ?></td>
+                                                                <td class="text-center"><?= number_format($total[$kbulan]) ?></td>
                                                             <?php } ?>
-                                                            <td class="text-right"><?= number_format(array_sum($total)) ?></td>
+                                                            <td class="text-center"><?= number_format(array_sum($total)) ?></td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -107,7 +120,9 @@
         foreach (array('masuk', 'putus') as $perkara) {
     ?>
             Highcharts.chart('container-<?= $kjenis . '-' . $perkara ?>', {
-
+                chart: {
+                    type: 'column'
+                },
                 title: {
                     text: 'Statistik Perkara <?= ucfirst($vjenis) ?> <?= ucfirst($perkara) ?> Tahun <?= $tahun ?>'
                 },
@@ -144,10 +159,19 @@
                         $data = array();
                         foreach ($bulan as $kbulan => $vbulan) {
                             $data[] = (int) $nominatif[$kjenis][$kpelaku][$kbulan]['jml_perkara_' . $perkara];
-                    ?>
-                    <?php
                         }
-                        $series[] = "{name: '" . $vpelaku . "', data: [" . implode(',', $data) . "]}";
+                        switch ($vpelaku) {
+                            case "TNI AD":
+                                $color = '#00a65a';
+                                break;
+                            case "TNI AL":
+                                $color = '#0073b7';
+                                break;
+                            case "TNI AU":
+                                $color = '#00c0ef';
+                                break;
+                        }
+                        $series[] = "{color: '" . $color . "', name: '" . $vpelaku . "', data: [" . implode(',', $data) . "]}";
                     }
                     echo implode(',', $series);
                     ?>
