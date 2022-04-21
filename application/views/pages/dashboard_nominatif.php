@@ -4,8 +4,38 @@
     <section class="content-header">
         <h1>Dashboard Nominatif</h1>
     </section>
-
     <section class="content  container-fluid">
+        <div class="row">
+            <div class="col-xs-12" style="margin-bottom: 10px;">
+                <form action="" method="post" name="adminForm">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="adminlist">
+                        <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="select-wrapper" style="width:35%;">
+                                        <select class="form-control select2" name="tahun" id="filterBulan" tabindex="1" onchange="form.submit();" style="width:100%;">
+                                            <?php
+                                            $year_array = array();
+                                            for ($i = date('Y') - 2; $i <= date('Y'); $i++) {
+                                                $year_array[$i] = $i;
+                                            }
+                                            foreach ($year_array as $value) {
+                                                if ($value == $filter_tahun) {
+                                                    echo '<option selected="selected" value="' . $value . '"> Tahun ' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $value . '"> Tahun ' . $value . '</option>';
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+        </div>
         <div class="row">
             <div class="col-xs-12">
                 <div class="nav-tabs-custom">

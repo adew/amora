@@ -72,11 +72,10 @@ class Model_konsep extends CI_Model
 		return $this->db->count_all_results();
 	}
 
-	public function get_all()
+	public function get_all($tahun)
 	{
-		$this->db->from($this->table);
-		$this->db->order_by('no_reg', 'asc');
-		$query = $this->db->get();
+		$sql = "SELECT * FROM $this->table WHERE YEAR(tgl_register) = $tahun ORDER BY CAST(no_reg AS UNSIGNED), no_reg ASC";
+		$query = $this->db->query($sql);
 		return $query->result();
 	}
 

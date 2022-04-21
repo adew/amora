@@ -784,9 +784,16 @@ class Admin extends CI_Controller
     }
 
     // KONSEP //
-    public function get_konsep()
+    public function get_konsep($vtahun = null)
     {
-        $list = $this->model_konsep->get_all();
+        $vtahun = $this->input->post('tahun', true);
+        $data['filter_tahun'] = !empty($vtahun) ? $vtahun : date('Y');
+        $tahun = !empty($vtahun) ? $vtahun : date('Y');
+
+        $list = $this->model_konsep->get_all($tahun);
+
+        // print_r($list);
+        // die;
         $data = array();
         $no = 0;
         foreach ($list as $field) {
@@ -819,7 +826,7 @@ class Admin extends CI_Controller
             $data[] = $row;
         }
 
-        echo json_encode(array('status' => true, 'data' => $data));
+        echo json_encode(array('status' => true, 'data' => $data, 'filter' => $tahun));
     }
 
     public function get_konsep_detail($id)
@@ -899,10 +906,14 @@ class Admin extends CI_Controller
     }
 
 
-    public function dashboard_nominatif($tahun = null)
+    public function dashboard_nominatif($vtahun = null)
     {
-        if (empty($tahun))
-            $tahun = date('Y');
+        // if (empty($tahun))
+        //     $tahun = date('Y');
+
+        $vtahun = $this->input->post('tahun', true);
+        $data['filter_tahun'] = !empty($vtahun) ? $vtahun : date('Y');
+        $tahun = !empty($vtahun) ? $vtahun : date('Y');
 
         $user = $this->ion_auth->user()->row();
 
@@ -918,7 +929,7 @@ class Admin extends CI_Controller
         foreach ($nominatif as $row) {
             $datanominatif[$row['jenis']][$row['pelaku']][$row['bulan']] = $row;
         }
-        // print_r($nominatif);
+        // print_r($datanominatif);
         // die;
         $data['nominatif'] = $datanominatif;
 

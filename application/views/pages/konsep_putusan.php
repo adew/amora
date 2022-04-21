@@ -17,6 +17,38 @@
             <i class="fa fa-chevron-left"></i> Kembali
         </a>
         <!-- <button id="deleteList" disabled="disabled" class="btn btn-danger" onclick="deleteList()"><i class="fa fa-trash"></i> Hapus</button> -->
+        <div class="row">
+            <div class="col-xs-12" style="margin-top:10px; margin-bottom: 2px;">
+                <form action="" method="post" name="adminForm">
+                    <table width="100%" border="0" cellspacing="0" cellpadding="0" class="adminlist">
+                        <tfoot>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="select-wrapper" style="width:35%;">
+                                        <!-- <select class="form-control select2" name="tahun" id="filterTahun" tabindex="1" onchange="form.submit();" style="width:100%;"> -->
+                                        <select class="form-control select2" name="tahun" id="filterTahun" tabindex="1" style="width:100%;">
+                                            <?php
+                                            $year_array = array();
+                                            for ($i = date('Y') - 2; $i <= date('Y'); $i++) {
+                                                $year_array[$i] = $i;
+                                            }
+                                            foreach ($year_array as $value) {
+                                                if ($value == $filter_tahun) {
+                                                    echo '<option selected="selected" value="' . $value . '"> Tahun ' . $value . '</option>';
+                                                } else {
+                                                    echo '<option value="' . $value . '"> Tahun ' . $value . '</option>';
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </form>
+            </div>
+        </div>
         <div class="tab-content">
             <div class="tab-pane fade in active" id="SuratMasuk">
                 <div class="box box-primary" style="margin-top: 10px;">
@@ -152,12 +184,23 @@
         get_data_konsep();
     });
 
-    function get_data_konsep() {
+    $("#filterTahun").change(function() {
+        // variabel dari nilai combo box kendaraan
+        var tahun = $(this).val();
+        // Menggunakan ajax untuk mengirim dan dan menerima data dari server
+        get_data_konsep(tahun);
+    });
+
+    function get_data_konsep(tahun) {
         $.ajax({
             url: "<?php echo site_url('admin/get_konsep') ?>",
-            type: "GET",
+            type: "POST",
+            data: {
+                tahun: tahun
+            },
             dataType: "JSON",
             success: function(response) {
+                $("#filterTahun").val(response.filter);
                 $('#grid_konsep').html('');
                 if (response.data.length > 0) {
                     for (let i = 0; i < response.data.length; i++) {
